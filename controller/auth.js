@@ -5,15 +5,21 @@ const login = async (req, res, next) => {
         let user = await User.findOne({
             email: req.body.email
         });
-        if (user && user.password === req.body.password) {
-            res.send("Login Successfully");
-        } else {
-            res.status(401).send({
-                msg: "Invalid credentials",
-            });
+        if (user) {
+            let user_pass = await User.findOne({ email: req.body.email }).select("password")
+            console.log(user_pass);
+            console.log(user_pass.password);
+            if (user_pass.password === req.body.password) {
+                res.send("Login Successfully");
+            }
+            else res.status(401).send({
+                msg: "wrong password"})
         }
+        return res.status(401).send({
+            msg: "Invalid Credentials"
+        })
     } catch (err) {
-        next(err);
+        next(err)
     }
 };
 

@@ -40,6 +40,10 @@ const RoomListingSchema=new mongoose.Schema({
     },
     closing_date:{
         type:Date
+    },
+    phone:{
+        type:Number,
+        required:true,
     }
 }) ;
 
