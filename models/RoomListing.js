@@ -33,7 +33,7 @@ const RoomListingSchema=new mongoose.Schema({
         required: true,
     },
     images:{
-        type:[String]
+        type:String
     },
     posted_date:{
         type:Date

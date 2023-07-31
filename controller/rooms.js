@@ -24,13 +24,13 @@ const getRooms=async(req,res,next)=>{
                     $regex:search,
                     $options:"i",
                 }
-        })
+        }).sort(sortBy);
         const items=rooms.slice(startIndex,endIndex);
         res.json({
             error:false,
             countPages:page,
             totalPages:Math.ceil((rooms.length)/limit),
-            items: rooms})
+            items: items})
     }
     catch(err){
         console.log(err);
@@ -40,7 +40,7 @@ const getRooms=async(req,res,next)=>{
 
 const postRooms= async(req, res, next)=>{
     try{
-        let images = req.files.map(file => file.filename);  //images is a file that contains the names of the files that are uploaded
+        let images = req.file?.filename || "";  //images is a file that contains the names of the files that are uploaded
         let rooms= await Room.create({
             ...req.body,images
         });
