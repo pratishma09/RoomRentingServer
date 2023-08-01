@@ -1,7 +1,8 @@
 const mongoose= require("mongoose")
+const jwt=require("jsonwebtoken")
 require("mongoose-type-email");
 
-const userSchema= new mongoose.Schema({
+const users= new mongoose.Schema({
     firstname: {
         type: String,
         required: true
@@ -21,12 +22,12 @@ const userSchema= new mongoose.Schema({
         minlength: 8,
         required: true,
         select:false,
-    },
-    
+    }
 
 },
 {collation:{locale: "en"}}
-)
+);
 
-const User= mongoose.model('User', userSchema);
+
+const User= mongoose.model('User', users);
 module.exports=User;
