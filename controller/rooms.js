@@ -12,19 +12,16 @@ const getRooms=async(req,res,next)=>{
         //for search query
         const search=req.query.search||"";
 
-        //sorting based on newest
-        let sort=req.query.sort||"posted_date";
-        const sortDirection=req.query.sortDirection||"desc";
-        const sortBy={};
-        sortBy[sort]=sortDirection==="desc"?-1:1;
-
         const rooms=await Room.find({
                 address:{
                     //for case-insensitive
-                    $regex:search,
+                    $regex:search, //regular expression
                     $options:"i",
                 }
-        }).sort(sortBy);
+        }).sort({"posted_date": -1});//sorting
+
+        console.log(rooms);
+
         const items=rooms.slice(startIndex,endIndex);
         res.json({
             error:false,

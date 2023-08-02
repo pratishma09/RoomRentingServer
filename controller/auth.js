@@ -18,7 +18,7 @@ const login = async (req, res, next) => {
                 msg: "wrong password"})
         }
         return res.status(401).send({
-            msg: "Invalid Credentials"
+            msg: "Invalid credentials"
         })
     } catch (err) {
         next(err)
@@ -33,7 +33,7 @@ const signup = async (req, res, next) => {
                 return res.status(422).json({error:"Email already exists"});
             }
             const user = await User({firstname,lastname,email,password});
-
+            
              await user.save();
             res.send({message:"user registered successfully"})
         } catch (err) {
