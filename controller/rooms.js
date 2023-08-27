@@ -1,39 +1,43 @@
 const Room= require("../models/RoomListing");
 
-//const{getRooms, postRooms, putRoom, deleteRoom}=require("../controller/rooms");
 const getRooms=async(req,res,next)=>{
     try{
-        //for pagenation
-        const page=parseInt(req.query)||1;
-        const limit=parseInt(req.query)||8;
-        const startIndex=(page-1)*limit;
-        const endIndex=startIndex+limit;
-
         //for search query
         const search=req.query.search||"";
+        const minPrice=parseFloat(req.query.minPrice)||0;
+        const maxPrice=parseFloat(req.query.maxPrice)||Number.MAX_VALUE;
+        const date = new Date();
+
+let currentDay= String(date.getDate()).padStart(2, '0');
+
+let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+
+let currentYear = date.getFullYear();
+
+let currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
 
         const rooms=await Room.find({
                 address:{
                     //for case-insensitive
                     $regex:search, //regular expression
                     $options:"i",
+                },
+                price:{
+                    $gte:minPrice,
+                    $lte:maxPrice
+                },
+                closing_date:{
+                    $gte: currentDate
                 }
         }).sort({"posted_date": -1});//sorting
-
-        console.log(rooms);
-
-        const items=rooms.slice(startIndex,endIndex);
-        res.json({
-            error:false,
-            countPages:page,
-            totalPages:Math.ceil((rooms.length)/limit),
-            items: items})
+        res.json(rooms);
     }
     catch(err){
         console.log(err);
         res.status(500).json({ error: true, message: "Internal Server Error" });        
     }
 }
+
 
 const postRooms= async(req, res, next)=>{
     try{

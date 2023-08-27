@@ -3,6 +3,7 @@ const multer = require("multer");
 //Setting storage engine
 const storage = multer.diskStorage({
     destination:(req,file,callback)=>{
+        //specifies the directory where the file is stored, the 2 arguments indicate that there is no error for null, and destination path is uploads
         callback(null,"./uploads")
     },
     filename:(req,file,callback)=>{
